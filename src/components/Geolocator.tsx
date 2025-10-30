@@ -35,7 +35,7 @@ function Geolocator() {
             setStatus("loading");
             setError(null);
             
-            const response = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${coords.latitude}&lon=${coords.longitude}&limit=1&appid=${WeatherAPI}`);
+            const response = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${coords.latitude}&lon=${coords.longitude}&limit=5&appid=${WeatherAPI}`);
 
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
@@ -44,7 +44,7 @@ function Geolocator() {
             const result = await response.json();
 
             if (!result.length) {
-                throw new Error("No location found for inputted coordinates.");
+                throw new Error(`No geolocation data found for latitude ${coords.latitude} and longitude ${coords.longitude}.`);
             }
 
             setCoords({
@@ -53,9 +53,13 @@ function Geolocator() {
                 name: result[0].name,
             })
 
+            for (const location of result) {
+                console.log(location);
+            }
+
             setStatus("success");
 
-        } catch(err: any) {
+        } catch (err: any) {
 
             setError(err.message || "Something went wrong when fetching geolocation data.");
             setStatus("error");

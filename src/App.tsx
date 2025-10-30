@@ -1,11 +1,16 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './App.css'
-import Geolocator from './components/Geolocator'
+import GeolocatorReactQuery from './components/GeolocatorReactQuery'
 
 function App() {
+  
+  const queryClient = new QueryClient();
 
   return (
     <>
-      <Geolocator />
+      <QueryClientProvider client={queryClient}>
+        <GeolocatorReactQuery />
+      </QueryClientProvider>
     </>
   )
 }
