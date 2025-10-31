@@ -1,12 +1,13 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { WeatherAPI } from "../state";
 
-function GeolocatorReactQuery() {
+type GeolocatorProps = {
+    coords: { latitude: string; longitude: string };
+    setCoords: React.Dispatch<React.SetStateAction<{ latitude: string; longitude: string }>>;
+}
 
-    const [coords, setCoords] = useState({latitude: "", longitude: ""});
+function GeolocatorReactQuery({ coords, setCoords }: GeolocatorProps) {
 
-    // Function to fetch data.
     const getGeolocation = async () => {
 
         const response = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${coords.latitude}&lon=${coords.longitude}&limit=5&appid=${WeatherAPI}`);
@@ -21,7 +22,7 @@ function GeolocatorReactQuery() {
     const { data, isLoading, isError, error, refetch} = useQuery({
         queryKey: ["geolocation", coords.latitude, coords.longitude],
         queryFn: getGeolocation,
-        enabled: false, // Prevents auto run.
+        enabled: false, // Prevents automatic fetch.
     })
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,17 +34,28 @@ function GeolocatorReactQuery() {
 
         event.preventDefault();
 
-        // Validate input before refetch.
-        const lat = parseFloat(coords.latitude);
-        const lon = parseFloat(coords.longitude);
+        const lat = parseFloat(coords.latitude as string);
+        const lon = parseFloat(coords.longitude as string);
 
         if (isNaN(lat) || isNaN(lon)) {
-            alert("please enter valid numeric coordinates.");
+            alert("Please enter valid numeric coordinates.");
             return;
         }
 
-        // Tells React Query to fetch now.
-        refetch();
+        refetch(); // Tells React Query to fetch now.
+    }
+
+    if (data && data.length > 0) {
+
+        const location = data[0];
+
+        if (location.name && location.lat && location.lon) {
+
+            setCoords({
+                latitude: location.lat.toString(),
+                longitude: location.lon.toString(),
+            })
+        }
     }
 
     return (
