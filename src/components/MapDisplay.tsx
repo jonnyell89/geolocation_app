@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
 type MapDisplayProps = {
@@ -6,12 +7,22 @@ type MapDisplayProps = {
     longitude: string;
 }
 
+function RecentreMap({ lat, lon }: { lat: number; lon: number }) {
+
+    const map = useMap();
+
+    useEffect(() => {
+        map.setView([lat, lon]);
+    }, [lat, lon, map]);
+
+    return null;
+}
+
 function MapDisplay({ latitude, longitude }: MapDisplayProps) {
     
-    const position: [number, number] = [
-        parseFloat(latitude as string),
-        parseFloat(longitude as string),
-    ]
+    const lat = parseFloat(latitude as string);
+    const lon = parseFloat(longitude as string);
+    const position: [number, number] = [lat, lon];
 
     return (
         <MapContainer className="leaflet-container" center={position} zoom={13} scrollWheelZoom={false}>
@@ -24,6 +35,7 @@ function MapDisplay({ latitude, longitude }: MapDisplayProps) {
                     Coordinates: {latitude}, {longitude}
                 </Popup>
             </Marker>
+            <RecentreMap lat={lat} lon={lon} />
         </MapContainer>
     )
 }

@@ -6,15 +6,16 @@ import './App.css'
 
 function App() {
 
-  const [coords, setCoords] = useState({ latitude: "51.505", longitude: "-0.09" })
+  const [inputCoords, setInputCoords] = useState({ latitude: "", longitude: "" });
+  const [mapCoords, setMapCoords] = useState({ latitude: "51.509865", longitude: "-0.118092" });
   
   const queryClient = new QueryClient();
 
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <GeolocatorReactQuery coords={coords} setCoords={setCoords} />
-        <MapDisplay latitude={coords.latitude} longitude={coords.longitude} />
+        <GeolocatorReactQuery coords={inputCoords} setCoords={setInputCoords} onSubmit={(newCoords) => setMapCoords(newCoords)} />
+        <MapDisplay latitude={mapCoords.latitude} longitude={mapCoords.longitude} />
       </QueryClientProvider>
     </>
   )
