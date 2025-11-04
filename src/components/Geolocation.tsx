@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { WeatherAPI } from '../state';
 
-function Geolocator() {
+function Geolocation() {
 
     const [coords, setCoords] = useState({
         name: "",
@@ -88,4 +88,4 @@ function Geolocator() {
     )
 }
 
-export default Geolocator;
+export default Geolocation;

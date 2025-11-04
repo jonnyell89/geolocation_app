@@ -3,26 +3,29 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
 type MapDisplayProps = {
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
 }
 
-function RecentreMap({ lat, lon }: { lat: number; lon: number }) {
+// Re-centres map on valid API location data.
+function RecentreMap({ position: [latitude, longitude] }: { position: [number, number] }) {
 
     const map = useMap();
 
+    // Runs when state changes.
     useEffect(() => {
-        map.setView([lat, lon]);
-    }, [lat, lon, map]);
+
+        map.setView([latitude, longitude]);
+
+    }, [latitude, longitude, map]);
 
     return null;
 }
 
+// Displays React-Leaflet map container.
 function MapDisplay({ latitude, longitude }: MapDisplayProps) {
     
-    const lat = parseFloat(latitude as string);
-    const lon = parseFloat(longitude as string);
-    const position: [number, number] = [lat, lon];
+    const position: [number, number] = [latitude, longitude];
 
     return (
         <MapContainer className="leaflet-container" center={position} zoom={13} scrollWheelZoom={false}>
@@ -35,7 +38,7 @@ function MapDisplay({ latitude, longitude }: MapDisplayProps) {
                     Coordinates: {latitude}, {longitude}
                 </Popup>
             </Marker>
-            <RecentreMap lat={lat} lon={lon} />
+            <RecentreMap position={position} />
         </MapContainer>
     )
 }

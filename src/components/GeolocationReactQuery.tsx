@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { WeatherAPI } from "../state";
 
-type GeolocatorProps = {
+type GeolocationProps = {
     coords: { latitude: string; longitude: string };
     setCoords: React.Dispatch<React.SetStateAction<{ latitude: string; longitude: string }>>;
-    onSubmit: (coords: { latitude: string; longitude: string }) => void;
+    onSubmit: (coords: { latitude: number; longitude: number }) => void;
 }
 
-// Receives { coords, setCoords } props from the parent component App.tsx.
-function GeolocatorReactQuery({ coords, setCoords, onSubmit }: GeolocatorProps) {
+function GeolocationReactQuery({ coords, setCoords, onSubmit }: GeolocationProps) {
 
+    // Asynchronous function to fetch geolocation data.
     const getGeolocation = async () => {
 
         const response = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${coords.latitude}&lon=${coords.longitude}&limit=5&appid=${WeatherAPI}`);
@@ -22,18 +22,20 @@ function GeolocatorReactQuery({ coords, setCoords, onSubmit }: GeolocatorProps) 
         return response.json();
     }
 
+    // React Query hook to manage async status and data fetching and caching.
     const { data, isLoading, isError, error, refetch} = useQuery({
         queryKey: ["geolocation", coords.latitude, coords.longitude],
         queryFn: getGeolocation,
-        enabled: false, // Refetch does not run automatically, but only runs when it is called.
+        enabled: false, // Prevents automatic fetch and refetch must be called manually.
     })
 
-    // With each keystroke, updates field in parent's state and re-renders input component.
+    // With each keystroke, updates state and re-renders input component.
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
         setCoords({...coords, [event.target.name]: event.target.value})
     }
 
+    // Triggers a manual fetch on form submission.
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 
         // Prevents default web browser refresh.
@@ -49,22 +51,23 @@ function GeolocatorReactQuery({ coords, setCoords, onSubmit }: GeolocatorProps) 
             return;
         }
 
-        const result = await refetch(); // Tells React Query to fetch now.
+        // Refetch is called manually.
+        const result = await refetch();
 
+        // Updates map coordinates with valid API location data.
         onSubmit({ latitude: result.data[0].lat, longitude: result.data[0].lon });
     }
 
-    // Runs when data or setInputCoords changes.
+    // Runs when data changes or setCoords is called.
     useEffect(() => {
 
-        // Without useEffect this would execute on each re-render.
         if (data && data.length > 0) {
 
             const location = data[0];
 
             if (location.name && location.lat && location.lon) {
 
-                // Triggers a state update which causes another re-render.
+                // Updates input coordinates with valid API location data.
                 setCoords({
                     latitude: location.lat.toString(),
                     longitude: location.lon.toString(),
@@ -94,4 +97,4 @@ function GeolocatorReactQuery({ coords, setCoords, onSubmit }: GeolocatorProps) 
     )
 }
 
-export default GeolocatorReactQuery;
+export default GeolocationReactQuery;
