@@ -23,7 +23,8 @@ function GeolocationReactQuery({ coords, setCoords, onSubmit }: GeolocationProps
     }
 
     // React Query hook to manage async status and data fetching and caching.
-    const { data, isLoading, isError, error, refetch} = useQuery({
+    const { data, isLoading, isError, error, refetch } = useQuery({
+
         queryKey: ["geolocation", coords.latitude, coords.longitude],
         queryFn: getGeolocation,
         enabled: false, // Prevents automatic fetch and refetch must be called manually.
@@ -47,6 +48,7 @@ function GeolocationReactQuery({ coords, setCoords, onSubmit }: GeolocationProps
 
         // Validates that coordinates are numbers.
         if (isNaN(lat) || isNaN(lon)) {
+
             alert("Please enter valid numeric coordinates.");
             return;
         }
@@ -69,6 +71,7 @@ function GeolocationReactQuery({ coords, setCoords, onSubmit }: GeolocationProps
 
                 // Updates input coordinates with valid API location data.
                 setCoords({
+
                     latitude: location.lat.toString(),
                     longitude: location.lon.toString(),
                 })
@@ -78,16 +81,16 @@ function GeolocationReactQuery({ coords, setCoords, onSubmit }: GeolocationProps
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="latitude">Latitude</label>
-                    <input type="text" id="latitude" name="latitude" value={coords.latitude} onChange={handleChange} />
+            <form className="form__container" onSubmit={handleSubmit}>
+                <div className="form__row">
+                    <label className="form__label" htmlFor="latitude">Latitude</label>
+                    <input className="form__input" type="text" id="latitude" name="latitude" value={coords.latitude} onChange={handleChange} />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="longitude">Longitude</label>
-                    <input type="text" id="longitude" name="longitude" value={coords.longitude} onChange={handleChange} />
+                <div className="form__row">
+                    <label className="form__label" htmlFor="longitude">Longitude</label>
+                    <input className="form__input" type="text" id="longitude" name="longitude" value={coords.longitude} onChange={handleChange} />
                 </div>
-                <button type="submit" disabled={!coords.latitude || !coords.longitude}>Submit</button>
+                <button className="form__btn" type="submit" disabled={!coords.latitude || !coords.longitude}>Submit</button>
             </form>
 
             {isLoading && <p>Loading...</p>}

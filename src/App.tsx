@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GeolocationReactQuery from './components/GeolocationReactQuery'
 import MapDisplay from './components/MapDisplay';
-import './App.css'
+import './App.scss'
 
 // user input -> updates inputCoords -> submit -> fetch API -> updates mapCoords -> re-centres map
 
@@ -19,10 +19,12 @@ function App() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <GeolocationReactQuery coords={inputCoords} setCoords={setInputCoords} onSubmit={(newCoords) => setMapCoords(newCoords)} />
-        <MapDisplay latitude={mapCoords.latitude} longitude={mapCoords.longitude} />
-      </QueryClientProvider>
+      <main className='site-main'>
+        <QueryClientProvider client={queryClient}>
+          <GeolocationReactQuery coords={inputCoords} setCoords={setInputCoords} onSubmit={(newCoords) => setMapCoords(newCoords)} />
+          <MapDisplay latitude={mapCoords.latitude} longitude={mapCoords.longitude} />
+        </QueryClientProvider>
+      </main>
     </>
   )
 }

@@ -1,0 +1,84 @@
+@use "./variables" as *;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: $body-background-colour;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-main {
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.form__container {
+  width: 100%;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  gap: 1rem;
+  border: 1px solid $form-label-font-colour;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background-color: $form-background-colour;
+}
+
+.form__row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form__label {
+  text-align: left;
+  font-size: 0.9em;
+  margin-bottom: 0.25em;
+  color: $form-label-font-colour;
+}
+
+.form__input {
+  padding: 0.5em;
+  font-size: 1rem;
+  border: 1px solid $form-label-font-colour;
+  border-radius: 0.5em;
+  color: $form-label-font-colour;
+  background-color: $body-background-colour;
+}
+
+.form__input:focus {
+  border-color: $form-border-colour-focus;
+}
+
+.form__btn {
+  width: 100%;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border: none;
+  border-radius: 0.5em;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: $form-btn-font-colour;
+  background-color: $form-btn-colour;
+  cursor: pointer;
+}
+
+.leaflet__container {
+  width: 100%;
+  height: 400px;
+  border-radius: 1em;
+}
